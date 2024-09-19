@@ -6,7 +6,7 @@
     <div class="side-nav__devider my-6"></div>
     <ul>
         <li>
-            <a href="{{ route('home') }}" class="side-menu {{ request()->routeIs('home') ? 'side-menu--active' : '' }}">
+            <a href="{{ route('admin') }}" class="side-menu {{ request()->routeIs('admin') ? 'side-menu--active' : '' }}">
                 <div class="side-menu__icon"> <i data-lucide="home"></i> </div>
                 <div class="side-menu__title"> Dashboard </div>
             </a>

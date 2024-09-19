@@ -43,6 +43,8 @@ class UserController extends Controller
 
 
         // dd($validated);
+
+        // dd($validated);
         User::create($validated);
         flash()->success('User berhasil ditambahkan.');
 

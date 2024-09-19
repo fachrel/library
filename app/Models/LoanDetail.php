@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use App\Models\Book;
 use App\Models\Loan;
 use Illuminate\Database\Eloquent\Model;
@@ -27,5 +28,22 @@ class LoanDetail extends Model
         return $this->belongsTo(Loan::class);
     }
 
+    public function calculateFine()
+    {
+        $borrowedAt = Carbon::parse($this->borrowed_at);
+        $returnedAt = $this->returned_at ? Carbon::parse($this->returned_at) : Carbon::now();
 
+        $dueDate = $borrowedAt->copy()->addDays(7);
+
+        if ($returnedAt->gt($dueDate)) {
+            $daysOverdue = $returnedAt->diffInDays($dueDate, false);
+            return abs($daysOverdue) * 3000 + 10000;
+        }
+
+        if($returnedAt == $dueDate){
+            return 10000;
+        }
+
+        return 0;
+    }
 }

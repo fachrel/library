@@ -125,7 +125,7 @@
                                     </div>
                                     <div class="mt-3">
                                         <label for="regular-form-1" class="form-label">Level</label>
-                                        <select value="{{ $user->level }}" class="form-select mt-2 sm:mr-2">
+                                        <select value="{{ $user->level }}" name="level" class="form-select mt-2 sm:mr-2">
                                             <option value="0">Peminjam</option>
                                             <option value="1">Admin</option>
                                             <option value="2">Petugas</option>

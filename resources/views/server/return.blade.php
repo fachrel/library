@@ -68,7 +68,7 @@
                                 <div class="whitespace-nowrap">{{ $loan->must_returned_at }}</div>
                             </td>
                             <td class="w-40 text-center">
-                                <div class="pr-16">-</div>
+                                <div class="pr-16">{{ $loan->calculateTotalFine() }}</div>
                             </td>
                             <td class="table-report__action">
                                 <div class="flex justify-center items-center">

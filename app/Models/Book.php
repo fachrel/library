@@ -36,4 +36,12 @@ class Book extends Model
                 ->count();
     }
 
+    public function isBookBorrowed($userId)
+    {
+        return LoanDetail::where('book_id', $this->id)
+            ->where('returned_at', null)
+            ->where('invoice', 'like', "%-$userId-%")
+            ->exists();
+    }
+
 }

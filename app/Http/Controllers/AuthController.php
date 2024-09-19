@@ -16,22 +16,30 @@ class AuthController extends Controller
 
     public function authenticate(Request $request)
     {
+        // Validate credentials
         $credentials = $request->validate([
             'username' => ['required', 'string', 'max:255'],
             'password' => ['required', 'string'],
         ]);
 
+        // Attempt to authenticate user
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
+
             flash()->success('Berhasil login.');
 
-            return redirect()->intended('/admin');
-        }
-        flash()->error('Username atau password salah.');
+            $userLevel = Auth::user()->level;
 
-        return redirect('/login')->withErrors([
-            'username' => 'The provided credentials do not match our records.',
-        ]);
+            if ($userLevel == "0") {
+                return redirect()->intended(route('home', absolute: false));
+            } else {
+                return redirect()->intended(route('admin', absolute: false));
+            }
+        }
+
+        // Authentication failed, redirect back with error message
+        flash()->error('Username atau password salah.');
+        return redirect()->back();
     }
 
 
@@ -43,7 +51,7 @@ class AuthController extends Controller
 
         $request->session()->regenerateToken();
 
-        return redirect('/login');
+        return redirect('/');
     }
 
     public function register()

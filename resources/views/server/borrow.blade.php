@@ -176,7 +176,7 @@
                                     @php
                                         $selectedUser = session('selectedUser');
                                     @endphp
-                                    <div class="mt-1">{{ $selectedUser['username'] }}</div>
+                                    <div class="mt-1">{{ $selectedUser['name'] }}</div>
                                 @else
                                     <div class="mt-1 text-red-200">Peminjam belum dipilih</div>
                                 @endif

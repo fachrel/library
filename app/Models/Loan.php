@@ -39,4 +39,18 @@ class Loan extends Model
             ->whereNotNull('returned_at')
             ->count();
     }
+
+    public function calculateTotalFine()
+    {
+        return $this->loanDetails->sum(function ($loanDetail) {
+            return $loanDetail->calculateFine();
+        });
+    }
+
+    public function countWithFine()
+    {
+        return $this->loanDetails->filter(function ($loanDetail) {
+            return $loanDetail->calculateFine() > 0;
+        })->count();
+    }
 }

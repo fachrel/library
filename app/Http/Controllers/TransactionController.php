@@ -21,6 +21,7 @@ class TransactionController extends Controller
         $user = User::findOrFail($request->user);
         session()->put('selectedUser', [
             'id' => $user->id,
+            'name' => $user->name,
             'username' => $user->username,
         ]);
 
@@ -33,6 +34,24 @@ class TransactionController extends Controller
     {
         $book = Book::findOrFail($id);
         $cart = session()->get('cart', []);
+        $user = session()->get('selectedUser');
+
+        if (!$user || empty($user)) {
+            flash()->error('Pilih peminjam terlebih dahulu.');
+            return redirect()->back();
+        }
+
+
+        if ($book->quantity - $book->CountBorrowedBook() < 1) {
+            flash()->error('Stock Buku ini habis');
+            return redirect()->back();
+        }
+
+        if ($book->isBookBorrowed($user['id'])) {
+            flash()->error('Buku ini sudah dipinjam oleh pengguna dan belum dikembalikan.');
+            return redirect()->back();
+        }
+
         if(isset($cart[$id])) {
             flash()->error('Buku sudah ditambahkan.');
         } else {
@@ -86,7 +105,7 @@ class TransactionController extends Controller
             'invoice'       => 'INV-' . now()->format('Ymd') . '-' . $user['id'] . '-' . str_pad(count($cart), 3, '0', STR_PAD_LEFT),
             'user_id' => $user['id'],
             'borrowed_at'   => now(),
-            'must_returned_at'   => now()->addDays(7),
+            'must_returned_at'   => now()->addDays(value: 7),
         ]);
 
         $loan_id = $loan->id;
@@ -119,5 +138,20 @@ class TransactionController extends Controller
     public function detail($id){
         $loan = Loan::findOrFail($id);
         return view('server.return-detail', compact('loan'));
+    }
+
+    public function returnBook($id){
+        $loanDetail = LoanDetail::findOrFail($id);
+
+        if($loanDetail->returned_at !== null){
+            flash()->error('Buku sudah dikembalikan.');
+            return redirect()->back();
+        }
+        $loanDetail->update([
+            'returned_at'   => now(),
+        ]);
+
+        flash()->success('Buku berhasil dikembalikan.');
+        return redirect()->back();
     }
 }

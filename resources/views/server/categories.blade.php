@@ -29,7 +29,7 @@
             </div>
         </div>
     </div> <!-- END: Modal Content -->
-    <table class="table mt-5">
+    <table id="myTable" class="table mt-5">
         <thead class="table-light">
             <tr>
                 <th class="whitespace-nowrap">#</th>
@@ -39,7 +39,6 @@
         </thead>
         <tbody>
             @foreach ($categories as $category)
-
                 <tr>
                     <td>{{ $loop->iteration }}</td>
                     <td>{{ $category->name }}</td>
@@ -107,5 +106,10 @@
         </div>
         <button type="submit" class="btn btn-primary w-24 mr-1 mb-2">Simpan</button>
     </form> --}}
+    {{-- <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+    <script src="https://cdn.datatables.net/2.1.6/js/dataTables.min.js"></script>
 
+    <script>
+        let table = new DataTable('#myTable');
+    </script> --}}
 @endsection
